@@ -19,16 +19,17 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     var LEDLightPeripheral: CBPeripheral!
     
     //MARK: Properties
-    @IBOutlet weak var redSliderBar: UISlider!
-    @IBOutlet weak var greenSliderBar: UISlider!
-    @IBOutlet weak var blueSliderBar: UISlider!
-    @IBOutlet weak var lumenSliderBar: UISlider!
 
-    @IBOutlet weak var colorDisplayButton: UIButton!
     @IBOutlet weak var statusLabel: UILabel!
-    @IBOutlet weak var colorDisplay: UIImageView!
     
     @IBOutlet weak var mainView: UIView!
+    
+    @IBOutlet weak var lightBulbView: UIImageView!
+    
+    @IBOutlet weak var redBar: UIView!
+    @IBOutlet weak var greenBar: UIView!
+    @IBOutlet weak var blueBar: UIView!
+    @IBOutlet weak var dimmerBar: UIView!
     
     var redValue: Float = 0.5
     var greenValue: Float = 0.5
@@ -39,8 +40,14 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     var RXCharacteristic: CBCharacteristic?
     var TXCharacteristic: CBCharacteristic?
     
+    var barDragProcess = 0 //0=off, 1=red bar, 2...4=dimmer bar
+    var barDragLowBound: Float = 0.0
+    var barDragUpperBound: Float = 0.0
+    
+    var bluetoothRefreshTapProcess = 0 //0=off, 1=tap on
+    
     //creating a swipe recognizer for bluetooth refresh
-    var swipeRecognizer = UISwipeGestureRecognizer()
+    //var swipeRecognizer = UISwipeGestureRecognizer()
     
     //MARK: Special Control Buttons (slow fade, fast fade, cut, flash)
     @IBAction func slowFadeButtonPressed(_ sender: UIButton) {
@@ -80,7 +87,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
-    
     //MARK: Preset Color Tile Buttons
     @IBAction func presetColorTile(_ sender: UIButton) {
             redValue = 0
@@ -119,7 +125,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
     
     //MARK: Slider Bars
-    @IBAction func redSliderUpdated(_ sender: UISlider) {
+    /*@IBAction func redSliderUpdated(_ sender: UISlider) {
         self.redValue = redSliderBar.value
         //update the color display to show the modified color
         updateColorDisplay()
@@ -147,7 +153,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
         
         
-    }
+    }*/
     
     
     //This function is called every time we want to send a new color command to the LEDs!
@@ -180,8 +186,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     //UpdateColorDisplay is called whenever slider bars adjust the custom color
     // it changes the rectangular UI color display
     func updateColorDisplay() -> Void {
-        self.colorDisplay.backgroundColor = UIColor(red: CGFloat(redValue), green: CGFloat(greenValue), blue: CGFloat(blueValue), alpha: 1)
-        
+        lightBulbView.tintColor = UIColor(red: CGFloat(((redValue*0.75)+0.25)*self.brightnessValue), green: CGFloat(((greenValue*0.75)+0.25)*self.brightnessValue), blue: CGFloat(((blueValue*0.75)+0.25)*self.brightnessValue), alpha: 1)
     }
     
     
@@ -190,9 +195,12 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         // Do any additional setup after loading the view, typically from a nib.
         
         //get the initial slider values and update the color display to show them
-        redValue = redSliderBar.value
-        greenValue = greenSliderBar.value
-        blueValue = blueSliderBar.value
+        redValue = 0
+        greenValue = 0
+        blueValue = 0
+        
+        let lbimage = UIImage(named: "lightbulb.png")!.withRenderingMode(.alwaysTemplate)
+        lightBulbView.image = lbimage
         
         //update the color display initially
         updateColorDisplay()
@@ -200,10 +208,20 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         centralManager = CBCentralManager(delegate: self, queue: nil)
         
         //set up the swipe gesture for resetting bluetooth
-        self.mainView.addGestureRecognizer(swipeRecognizer)
+        /*self.mainView.addGestureRecognizer(swipeRecognizer)
         swipeRecognizer.direction = UISwipeGestureRecognizerDirection.down
-        swipeRecognizer.addTarget(self, action: #selector(ViewController.screenSwiped))
+        swipeRecognizer.addTarget(self, action: #selector(ViewController.screenSwiped))*/
         
+        //setting bar positions & width
+        let screenWidth = mainView.bounds.width
+        let screenHeight = mainView.bounds.height
+        redBar.frame = CGRect(x:0,y:screenHeight-150,width:screenWidth/4.0,height:150)
+        greenBar.frame = CGRect(x:screenWidth*0.25,y:screenHeight-150,width:screenWidth/4.0,height:150)
+        blueBar.frame = CGRect(x:screenWidth*0.5,y:screenHeight-150,width:screenWidth/4.0,height:150)
+        dimmerBar.frame = CGRect(x:screenWidth*0.75,y:screenHeight-150,width:screenWidth/4.0,height:150)
+        
+        barDragUpperBound = Float(screenHeight)-150.0
+        barDragLowBound = 180.0
     }
     
     override func didReceiveMemoryWarning() {
@@ -211,8 +229,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         // Dispose of any resources that can be recreated.
     }
     
-    //whenever the screen is swiped, turn on and off the bluetooth to reconnect
-    func screenSwiped() -> Void {
+    //turn on and off the bluetooth to reconnect
+    func refreshBluetooth() {
         self.statusLabel.text = "Reconnecting to bluetooth..."
         
         if self.TXCharacteristic != nil {
@@ -222,12 +240,195 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         //now search for peripherals (this will trigger the whole connection routine)
         findPeripherals(centralManager)
-    
-        
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let firstTouch:UITouch = touches.first! as UITouch
+        if Float(firstTouch.location(in: mainView).y) > barDragLowBound && Float(firstTouch.location(in: mainView).y) < barDragUpperBound { //valid bar drag start
+            
+            //assigns region to touch
+            let touchX = Float(firstTouch.location(in: mainView).x)
+            var touchY = Float(firstTouch.location(in: mainView).y)
+            let screenWidth = Float(mainView.bounds.width)
+            let screenHeight = mainView.bounds.height
+            if touchX < screenWidth*0.25 {
+                barDragProcess = 1
+            } else if touchX < screenWidth*0.5 {
+                barDragProcess = 2
+            } else if touchX < screenWidth*0.75 {
+                barDragProcess = 3
+            } else if touchX <= screenWidth {
+                barDragProcess = 4
+            }
+            
+            if barDragProcess == 1 { //red bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                redBar.frame = CGRect(x:0,y:CGFloat(touchY),width:CGFloat(screenWidth)/4.0,height:screenHeight-CGFloat(touchY))
+                redValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                sendColorToLEDS()
+            } else if barDragProcess == 2 { //green bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                greenBar.frame = CGRect(x:CGFloat(screenWidth)*0.25,y:CGFloat(touchY),width:CGFloat(screenWidth)/4.0,height:screenHeight-CGFloat(touchY))
+                greenValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                sendColorToLEDS()
+            } else if barDragProcess == 3 { //blue bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                blueBar.frame = CGRect(x:CGFloat(screenWidth)*0.5,y:CGFloat(touchY),width:CGFloat(screenWidth)/4.0,height:screenHeight-CGFloat(touchY))
+                blueValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                sendColorToLEDS()
+            } else if barDragProcess == 4 { //dimmer bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                dimmerBar.frame = CGRect(x:CGFloat(screenWidth)*0.75,y:CGFloat(touchY),width:CGFloat(screenWidth)/4.0,height:screenHeight-CGFloat(touchY))
+                let targetBrightness = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                
+                if abs(self.brightnessValue-targetBrightness)>0.05 {
+                    self.brightnessValue = targetBrightness
+                    //if the brightness value has changed, new colors should be sent to the LEDs
+                    sendColorToLEDS()
+                }
+            }
+            updateColorDisplay()
+        } else if Float(firstTouch.location(in: mainView).y) >= barDragUpperBound && bluetoothRefreshTapProcess != 1 { //valid bluetooth refresh tap
+            bluetoothRefreshTapProcess = 1
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let firstTouch:UITouch = touches.first! as UITouch
+        var touchY = Float(firstTouch.location(in: mainView).y)
+        
+        if barDragProcess != 0 {
+            let screenWidth = mainView.bounds.width
+            let screenHeight = mainView.bounds.height
+            
+            if barDragProcess == 1 { //red bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                redBar.frame = CGRect(x:0,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
+                redValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                sendColorToLEDS()
+            } else if barDragProcess == 2 { //green bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                greenBar.frame = CGRect(x:screenWidth*0.25,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
+                greenValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                sendColorToLEDS()
+            } else if barDragProcess == 3 { //blue bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                blueBar.frame = CGRect(x:screenWidth*0.5,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
+                blueValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                sendColorToLEDS()
+            } else if barDragProcess == 4 { //dimmer bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                dimmerBar.frame = CGRect(x:screenWidth*0.75,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
+                let targetBrightness = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                
+                if abs(self.brightnessValue-targetBrightness)>0.05 {
+                    self.brightnessValue = targetBrightness
+                    //if the brightness value has changed, new colors should be sent to the LEDs
+                    sendColorToLEDS()
+                }
+            }
+            updateColorDisplay()
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let firstTouch:UITouch = touches.first! as UITouch
+        var touchY = Float(firstTouch.location(in: mainView).y)
+        
+        if barDragProcess != 0 {
+            let screenWidth = mainView.bounds.width
+            let screenHeight = mainView.bounds.height
+            
+            if barDragProcess == 1 { //red bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                redBar.frame = CGRect(x:0,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
+                redValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                sendColorToLEDS()
+            } else if barDragProcess == 2 { //green bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                greenBar.frame = CGRect(x:screenWidth*0.25,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
+                greenValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                sendColorToLEDS()
+            } else if barDragProcess == 3 { //blue bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                blueBar.frame = CGRect(x:screenWidth*0.5,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
+                blueValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                sendColorToLEDS()
+            } else if barDragProcess == 4 { //dimmer bar
+                if touchY > barDragUpperBound {
+                    touchY = barDragUpperBound
+                } else if touchY < barDragLowBound {
+                    touchY = barDragLowBound
+                }
+                dimmerBar.frame = CGRect(x:screenWidth*0.75,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
+                let targetBrightness = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                
+                if abs(self.brightnessValue-targetBrightness)>0.05 {
+                    self.brightnessValue = targetBrightness
+                    //if the brightness value has changed, new colors should be sent to the LEDs
+                    sendColorToLEDS()
+                }
+            }
+            updateColorDisplay()
+        }
+        
+        barDragProcess = 0
+        
+        if bluetoothRefreshTapProcess != 0 {
+            refreshBluetooth()
+        }
+        
+        bluetoothRefreshTapProcess = 0
+    }
     
 
+    
+    
+    
     
     //MARK: Bluetooth Low Energy Stuff
     

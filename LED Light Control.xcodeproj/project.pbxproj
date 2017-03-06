@@ -13,6 +13,17 @@
 		9802DBC11D07D794002BDC47 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9802DBC01D07D794002BDC47 /* Assets.xcassets */; };
 		9802DBC41D07D794002BDC47 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9802DBC21D07D794002BDC47 /* LaunchScreen.storyboard */; };
 		987C157C1D4C2BDA00B3EC6D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 987C157B1D4C2BDA00B3EC6D /* AVFoundation.framework */; };
+		FC8CD83C1E6CFA8D0097A015 /* button_add.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD8361E6CFA8D0097A015 /* button_add.png */; };
+		FC8CD83D1E6CFA8D0097A015 /* button_cut.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD8371E6CFA8D0097A015 /* button_cut.png */; };
+		FC8CD83E1E6CFA8D0097A015 /* button_fastfade.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD8381E6CFA8D0097A015 /* button_fastfade.png */; };
+		FC8CD83F1E6CFA8D0097A015 /* button_flash.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD8391E6CFA8D0097A015 /* button_flash.png */; };
+		FC8CD8401E6CFA8D0097A015 /* button_slowfade.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD83A1E6CFA8D0097A015 /* button_slowfade.png */; };
+		FC8CD8411E6CFA8D0097A015 /* button_subtract.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD83B1E6CFA8D0097A015 /* button_subtract.png */; };
+		FC8CD8431E6CFA980097A015 /* line.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD8421E6CFA980097A015 /* line.png */; };
+		FC8CD84B1E6D00140097A015 /* button_add_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD84A1E6D00140097A015 /* button_add_tabbar.png */; };
+		FC8CD84D1E6D00190097A015 /* lightbulb_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD84C1E6D00190097A015 /* lightbulb_tabbar.png */; };
+		FC8CD84F1E6D0A540097A015 /* lightbulb_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD84E1E6D0A540097A015 /* lightbulb_outline.png */; };
+		FCE4D2021E6BA7E90058805E /* lightbulb.png in Resources */ = {isa = PBXBuildFile; fileRef = FCE4D2011E6BA7E90058805E /* lightbulb.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +48,17 @@
 		9802DBC31D07D794002BDC47 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9802DBC51D07D794002BDC47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		987C157B1D4C2BDA00B3EC6D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		FC8CD8361E6CFA8D0097A015 /* button_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_add.png; sourceTree = "<group>"; };
+		FC8CD8371E6CFA8D0097A015 /* button_cut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_cut.png; sourceTree = "<group>"; };
+		FC8CD8381E6CFA8D0097A015 /* button_fastfade.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_fastfade.png; sourceTree = "<group>"; };
+		FC8CD8391E6CFA8D0097A015 /* button_flash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_flash.png; sourceTree = "<group>"; };
+		FC8CD83A1E6CFA8D0097A015 /* button_slowfade.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_slowfade.png; sourceTree = "<group>"; };
+		FC8CD83B1E6CFA8D0097A015 /* button_subtract.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_subtract.png; sourceTree = "<group>"; };
+		FC8CD8421E6CFA980097A015 /* line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line.png; sourceTree = "<group>"; };
+		FC8CD84A1E6D00140097A015 /* button_add_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_add_tabbar.png; sourceTree = "<group>"; };
+		FC8CD84C1E6D00190097A015 /* lightbulb_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lightbulb_tabbar.png; sourceTree = "<group>"; };
+		FC8CD84E1E6D0A540097A015 /* lightbulb_outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lightbulb_outline.png; sourceTree = "<group>"; };
+		FCE4D2011E6BA7E90058805E /* lightbulb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lightbulb.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +99,17 @@
 				9802DBC01D07D794002BDC47 /* Assets.xcassets */,
 				9802DBC21D07D794002BDC47 /* LaunchScreen.storyboard */,
 				9802DBC51D07D794002BDC47 /* Info.plist */,
+				FCE4D2011E6BA7E90058805E /* lightbulb.png */,
+				FC8CD84C1E6D00190097A015 /* lightbulb_tabbar.png */,
+				FC8CD84E1E6D0A540097A015 /* lightbulb_outline.png */,
+				FC8CD8361E6CFA8D0097A015 /* button_add.png */,
+				FC8CD84A1E6D00140097A015 /* button_add_tabbar.png */,
+				FC8CD8371E6CFA8D0097A015 /* button_cut.png */,
+				FC8CD8381E6CFA8D0097A015 /* button_fastfade.png */,
+				FC8CD8391E6CFA8D0097A015 /* button_flash.png */,
+				FC8CD83A1E6CFA8D0097A015 /* button_slowfade.png */,
+				FC8CD83B1E6CFA8D0097A015 /* button_subtract.png */,
+				FC8CD8421E6CFA980097A015 /* line.png */,
 			);
 			path = "LED Light Control";
 			sourceTree = "<group>";
@@ -114,7 +147,7 @@
 				TargetAttributes = {
 					9802DBB51D07D793002BDC47 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = VJD8RRVJRX;
+						DevelopmentTeam = RN5RJ6PAK3;
 						LastSwiftMigration = 0800;
 					};
 				};
@@ -143,8 +176,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				9802DBC41D07D794002BDC47 /* LaunchScreen.storyboard in Resources */,
+				FCE4D2021E6BA7E90058805E /* lightbulb.png in Resources */,
+				FC8CD84F1E6D0A540097A015 /* lightbulb_outline.png in Resources */,
 				9802DBC11D07D794002BDC47 /* Assets.xcassets in Resources */,
+				FC8CD84B1E6D00140097A015 /* button_add_tabbar.png in Resources */,
+				FC8CD84D1E6D00190097A015 /* lightbulb_tabbar.png in Resources */,
 				9802DBBF1D07D793002BDC47 /* Main.storyboard in Resources */,
+				FC8CD83F1E6CFA8D0097A015 /* button_flash.png in Resources */,
+				FC8CD8411E6CFA8D0097A015 /* button_subtract.png in Resources */,
+				FC8CD8431E6CFA980097A015 /* line.png in Resources */,
+				FC8CD83E1E6CFA8D0097A015 /* button_fastfade.png in Resources */,
+				FC8CD8401E6CFA8D0097A015 /* button_slowfade.png in Resources */,
+				FC8CD83D1E6CFA8D0097A015 /* button_cut.png in Resources */,
+				FC8CD83C1E6CFA8D0097A015 /* button_add.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +321,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = RN5RJ6PAK3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"/Users/mknowles/Documents/XCODE/AudioKit-iOS/**",
 					"$(PROJECT_DIR)",
@@ -300,6 +345,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = RN5RJ6PAK3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"/Users/mknowles/Documents/XCODE/AudioKit-iOS/**",
 					"$(PROJECT_DIR)",
