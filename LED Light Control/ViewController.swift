@@ -218,7 +218,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         redBar.frame = CGRect(x:0,y:screenHeight-150,width:screenWidth/4.0,height:150)
         greenBar.frame = CGRect(x:screenWidth*0.25,y:screenHeight-150,width:screenWidth/4.0,height:150)
         blueBar.frame = CGRect(x:screenWidth*0.5,y:screenHeight-150,width:screenWidth/4.0,height:150)
-        dimmerBar.frame = CGRect(x:screenWidth*0.75,y:screenHeight-150,width:screenWidth/4.0,height:150)
+        dimmerBar.frame = CGRect(x:screenWidth*0.75,y:180,width:screenWidth/4.0,height:screenHeight-150)
         
         barDragUpperBound = Float(screenHeight)-150.0
         barDragLowBound = 180.0
