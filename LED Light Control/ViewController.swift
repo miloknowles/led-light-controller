@@ -46,12 +46,15 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
     var bluetoothRefreshTapProcess = 0 //0=off, 1=tap on
     
+    var refreshTimer = 0
+    
     //creating a swipe recognizer for bluetooth refresh
     //var swipeRecognizer = UISwipeGestureRecognizer()
     
     //MARK: Special Control Buttons (slow fade, fast fade, cut, flash)
     @IBAction func slowFadeButtonPressed(_ sender: UIButton) {
         if self.TXCharacteristic != nil {
+            print("SLOW FADE EFFECT")
             self.stringToSend = "slowFade"
             
             let dataToSend = self.stringToSend.data(using: String.Encoding.utf8.rawValue)!
@@ -61,6 +64,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
     @IBAction func fastFadeButtonPressed(_ sender: UIButton) {
         if self.TXCharacteristic != nil {
+            print("FAST FADE EFFECT")
             self.stringToSend = "fastFade"
             
             let dataToSend = self.stringToSend.data(using: String.Encoding.utf8.rawValue)!
@@ -70,6 +74,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
     @IBAction func cutEffectButton(_ sender: UIButton) {
         if self.TXCharacteristic != nil {
+            print("CUT EFFECT")
             self.stringToSend = "cut"
             
             let dataToSend = self.stringToSend.data(using: String.Encoding.utf8.rawValue)!
@@ -80,6 +85,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
     @IBAction func flashEffectButton(_ sender: UIButton) {
         if self.TXCharacteristic != nil {
+            print("FLASH EFFECT")
             self.stringToSend = "flash"
             
             let dataToSend = self.stringToSend.data(using: String.Encoding.utf8.rawValue)!
@@ -87,73 +93,18 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
-    //MARK: Preset Color Tile Buttons
-    @IBAction func presetColorTile(_ sender: UIButton) {
-            redValue = 0
-            greenValue = 0
-            blueValue = 0
-            
-            switch sender.tag { //each of the preset color tiles has an integer tag
-            case 0:
-                redValue = 1
-            case 1:
-                greenValue = 1
-            case 2:
-                blueValue = 1
-            case 3:
-                redValue = 0.588
-                greenValue = 0.588
-                blueValue = 0.588
-            case 4:
-                redValue = 1
-                blueValue = 0.471
-            case 5:
-                redValue = 0.471
-                blueValue = 1
-            case 6:
-                blueValue = 1
-                greenValue = 1
-            default:
-                redValue = 0
-                blueValue = 0
-                greenValue = 0
+    func update() {
+        //throttles LED updates, avoids swamping arduino with inputs
+        if barDragProcess != 0 {
+            if refreshTimer <= 0 {
+                refreshTimer = 10
+                
+                sendColorToLEDS()
+            } else {
+                refreshTimer -= 1
             }
-            //once all of the colors are updated, send them to the LEDs
-            sendColorToLEDS()
         }
-    
-    
-    
-    //MARK: Slider Bars
-    /*@IBAction func redSliderUpdated(_ sender: UISlider) {
-        self.redValue = redSliderBar.value
-        //update the color display to show the modified color
-        updateColorDisplay()
     }
-    
-    @IBAction func greenSliderUpdated(_ sender: UISlider) {
-        self.greenValue = greenSliderBar.value
-        //update the color display to show the modified color
-        updateColorDisplay()
-    }
-    
-    @IBAction func blueSliderChanged(_ sender: UISlider) {
-        self.blueValue = blueSliderBar.value
-        //update the color display to show the modified color
-        updateColorDisplay()
-    }
-    
-    @IBAction func lumenSliderUpdated(_ sender: UISlider) {
-        //update the brightness when the lumen slider is changed by 0.05 (prevents flooding the bluetooth TX)
-        
-        if abs(self.brightnessValue-lumenSliderBar.value)>0.05 {
-            self.brightnessValue = lumenSliderBar.value
-            //if the brightness value has changed, new colors should be sent to the LEDs
-            sendColorToLEDS()
-        }
-        
-        
-    }*/
     
     
     //This function is called every time we want to send a new color command to the LEDs!
@@ -195,7 +146,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         // Do any additional setup after loading the view, typically from a nib.
         
         //get the initial slider values and update the color display to show them
-        redValue = 0
+        redValue = 1.0
         greenValue = 0
         blueValue = 0
         
@@ -215,13 +166,15 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         //setting bar positions & width
         let screenWidth = mainView.bounds.width
         let screenHeight = mainView.bounds.height
-        redBar.frame = CGRect(x:0,y:screenHeight-150,width:screenWidth/4.0,height:150)
+        redBar.frame = CGRect(x:0,y:180,width:screenWidth/4.0,height:screenHeight-150)
         greenBar.frame = CGRect(x:screenWidth*0.25,y:screenHeight-150,width:screenWidth/4.0,height:150)
         blueBar.frame = CGRect(x:screenWidth*0.5,y:screenHeight-150,width:screenWidth/4.0,height:150)
         dimmerBar.frame = CGRect(x:screenWidth*0.75,y:180,width:screenWidth/4.0,height:screenHeight-150)
         
         barDragUpperBound = Float(screenHeight)-150.0
         barDragLowBound = 180.0
+        
+        _ = Timer.scheduledTimer(timeInterval: 1.0/60.0, target: self, selector: #selector(self.update), userInfo: nil, repeats: true);
     }
     
     override func didReceiveMemoryWarning() {
@@ -295,13 +248,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                     touchY = barDragLowBound
                 }
                 dimmerBar.frame = CGRect(x:CGFloat(screenWidth)*0.75,y:CGFloat(touchY),width:CGFloat(screenWidth)/4.0,height:screenHeight-CGFloat(touchY))
-                let targetBrightness = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
                 
-                if abs(self.brightnessValue-targetBrightness)>0.05 {
-                    self.brightnessValue = targetBrightness
-                    //if the brightness value has changed, new colors should be sent to the LEDs
-                    sendColorToLEDS()
-                }
+                self.brightnessValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                sendColorToLEDS()
             }
             updateColorDisplay()
         } else if Float(firstTouch.location(in: mainView).y) >= barDragUpperBound && bluetoothRefreshTapProcess != 1 { //valid bluetooth refresh tap
@@ -325,7 +274,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                 }
                 redBar.frame = CGRect(x:0,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
                 redValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
-                sendColorToLEDS()
+                //sendColorToLEDS()
             } else if barDragProcess == 2 { //green bar
                 if touchY > barDragUpperBound {
                     touchY = barDragUpperBound
@@ -334,7 +283,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                 }
                 greenBar.frame = CGRect(x:screenWidth*0.25,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
                 greenValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
-                sendColorToLEDS()
+                //sendColorToLEDS()
             } else if barDragProcess == 3 { //blue bar
                 if touchY > barDragUpperBound {
                     touchY = barDragUpperBound
@@ -343,7 +292,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                 }
                 blueBar.frame = CGRect(x:screenWidth*0.5,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
                 blueValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
-                sendColorToLEDS()
+                //sendColorToLEDS()
             } else if barDragProcess == 4 { //dimmer bar
                 if touchY > barDragUpperBound {
                     touchY = barDragUpperBound
@@ -351,13 +300,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                     touchY = barDragLowBound
                 }
                 dimmerBar.frame = CGRect(x:screenWidth*0.75,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
-                let targetBrightness = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
-                
-                if abs(self.brightnessValue-targetBrightness)>0.05 {
-                    self.brightnessValue = targetBrightness
-                    //if the brightness value has changed, new colors should be sent to the LEDs
-                    sendColorToLEDS()
-                }
+                self.brightnessValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                //sendColorToLEDS()
             }
             updateColorDisplay()
         }
@@ -405,13 +349,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                     touchY = barDragLowBound
                 }
                 dimmerBar.frame = CGRect(x:screenWidth*0.75,y:CGFloat(touchY),width:screenWidth/4.0,height:screenHeight-CGFloat(touchY))
-                let targetBrightness = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
-                
-                if abs(self.brightnessValue-targetBrightness)>0.05 {
-                    self.brightnessValue = targetBrightness
-                    //if the brightness value has changed, new colors should be sent to the LEDs
-                    sendColorToLEDS()
-                }
+                self.brightnessValue = 1.0+Float(barDragLowBound-touchY)/Float(barDragUpperBound-barDragLowBound)
+                sendColorToLEDS()
             }
             updateColorDisplay()
         }
