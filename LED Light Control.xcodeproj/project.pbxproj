@@ -23,6 +23,7 @@
 		FC8CD84B1E6D00140097A015 /* button_add_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD84A1E6D00140097A015 /* button_add_tabbar.png */; };
 		FC8CD84D1E6D00190097A015 /* lightbulb_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD84C1E6D00190097A015 /* lightbulb_tabbar.png */; };
 		FC8CD84F1E6D0A540097A015 /* lightbulb_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD84E1E6D0A540097A015 /* lightbulb_outline.png */; };
+		FCE0D8E41E7106CE0052AA97 /* wrench.png in Resources */ = {isa = PBXBuildFile; fileRef = FCE0D8E31E7106CE0052AA97 /* wrench.png */; };
 		FCE4D2021E6BA7E90058805E /* lightbulb.png in Resources */ = {isa = PBXBuildFile; fileRef = FCE4D2011E6BA7E90058805E /* lightbulb.png */; };
 		FCF3D23F1E70C82400C17101 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF3D23E1E70C82400C17101 /* TableViewController.swift */; };
 /* End PBXBuildFile section */
@@ -59,6 +60,7 @@
 		FC8CD84A1E6D00140097A015 /* button_add_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_add_tabbar.png; sourceTree = "<group>"; };
 		FC8CD84C1E6D00190097A015 /* lightbulb_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lightbulb_tabbar.png; sourceTree = "<group>"; };
 		FC8CD84E1E6D0A540097A015 /* lightbulb_outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lightbulb_outline.png; sourceTree = "<group>"; };
+		FCE0D8E31E7106CE0052AA97 /* wrench.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wrench.png; sourceTree = "<group>"; };
 		FCE4D2011E6BA7E90058805E /* lightbulb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lightbulb.png; sourceTree = "<group>"; };
 		FCF3D23E1E70C82400C17101 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -113,6 +115,7 @@
 				FC8CD83A1E6CFA8D0097A015 /* button_slowfade.png */,
 				FC8CD83B1E6CFA8D0097A015 /* button_subtract.png */,
 				FC8CD8421E6CFA980097A015 /* line.png */,
+				FCE0D8E31E7106CE0052AA97 /* wrench.png */,
 			);
 			path = "LED Light Control";
 			sourceTree = "<group>";
@@ -179,6 +182,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9802DBC41D07D794002BDC47 /* LaunchScreen.storyboard in Resources */,
+				FCE0D8E41E7106CE0052AA97 /* wrench.png in Resources */,
 				FCE4D2021E6BA7E90058805E /* lightbulb.png in Resources */,
 				FC8CD84F1E6D0A540097A015 /* lightbulb_outline.png in Resources */,
 				9802DBC11D07D794002BDC47 /* Assets.xcassets in Resources */,
