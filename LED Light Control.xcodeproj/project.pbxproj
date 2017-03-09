@@ -24,6 +24,7 @@
 		FC8CD84D1E6D00190097A015 /* lightbulb_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD84C1E6D00190097A015 /* lightbulb_tabbar.png */; };
 		FC8CD84F1E6D0A540097A015 /* lightbulb_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8CD84E1E6D0A540097A015 /* lightbulb_outline.png */; };
 		FCE4D2021E6BA7E90058805E /* lightbulb.png in Resources */ = {isa = PBXBuildFile; fileRef = FCE4D2011E6BA7E90058805E /* lightbulb.png */; };
+		FCF3D23F1E70C82400C17101 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF3D23E1E70C82400C17101 /* TableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,6 +60,7 @@
 		FC8CD84C1E6D00190097A015 /* lightbulb_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lightbulb_tabbar.png; sourceTree = "<group>"; };
 		FC8CD84E1E6D0A540097A015 /* lightbulb_outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lightbulb_outline.png; sourceTree = "<group>"; };
 		FCE4D2011E6BA7E90058805E /* lightbulb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lightbulb.png; sourceTree = "<group>"; };
+		FCF3D23E1E70C82400C17101 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 			children = (
 				9802DBB91D07D793002BDC47 /* AppDelegate.swift */,
 				9802DBBB1D07D793002BDC47 /* ViewController.swift */,
+				FCF3D23E1E70C82400C17101 /* TableViewController.swift */,
 				9802DBBD1D07D793002BDC47 /* Main.storyboard */,
 				9802DBC01D07D794002BDC47 /* Assets.xcassets */,
 				9802DBC21D07D794002BDC47 /* LaunchScreen.storyboard */,
@@ -200,6 +203,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9802DBBC1D07D793002BDC47 /* ViewController.swift in Sources */,
+				FCF3D23F1E70C82400C17101 /* TableViewController.swift in Sources */,
 				9802DBBA1D07D793002BDC47 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

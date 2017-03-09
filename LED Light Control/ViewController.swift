@@ -14,6 +14,9 @@ import UIKit
 
 class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
 
+    //notifications
+    let colorNotification = Notification.Name(rawValue:"colorUpdate")
+    
     //creating BLE objects
     var centralManager: CBCentralManager!
     var LEDLightPeripheral: CBPeripheral!
@@ -21,6 +24,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     //MARK: Properties
 
     @IBOutlet weak var statusLabel: UILabel!
+    
+    @IBOutlet weak var colorBookmarkedLabel: UILabel!
+    var colorBookmarkedTimer = 0
     
     @IBOutlet weak var mainView: UIView!
     
@@ -93,6 +99,19 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
+    @IBAction func addColorButton(_ sender: UIButton) {
+        var savedColors: NSMutableArray = []
+        if UserDefaults.standard.object(forKey: "savedColors") != nil {
+            savedColors = (UserDefaults.standard.object(forKey: "savedColors") as! NSArray).mutableCopy() as! NSMutableArray
+        }
+        let colorValues = [redValue,greenValue,blueValue,self.brightnessValue]
+        savedColors.add(colorValues)
+        UserDefaults.standard.set(savedColors, forKey: "savedColors")
+        
+        colorBookmarkedTimer = 120
+        colorBookmarkedLabel.alpha = 1.0
+    }
+    
     func update() {
         //throttles LED updates, avoids swamping arduino with inputs
         if barDragProcess != 0 {
@@ -103,6 +122,19 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             } else {
                 refreshTimer -= 1
             }
+        }
+        
+        //hides colorBookmarkedLabel after some time
+        if colorBookmarkedTimer > 0 {
+            colorBookmarkedTimer -= 1
+            
+            if colorBookmarkedTimer < 60 {
+                colorBookmarkedLabel.alpha = CGFloat(Float(colorBookmarkedTimer)/Float(60.0))
+            }
+            
+        } else if (colorBookmarkedTimer == 0) {
+            colorBookmarkedTimer = -1
+            colorBookmarkedLabel.alpha = 0
         }
     }
     
@@ -127,11 +159,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             self.LEDLightPeripheral.writeValue(dataToSend, for: self.TXCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
         }
     }
-    
-    //when the custom color button is pressed, use the sendColorToLEDS function to send the commmand
-    @IBAction func setColorButtonPressed(_ sender: UIButton) {
-        sendColorToLEDS()
-    }
 
     
     //UpdateColorDisplay is called whenever slider bars adjust the custom color
@@ -140,10 +167,34 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         lightBulbView.tintColor = UIColor(red: CGFloat(((redValue*0.75)+0.25)*self.brightnessValue), green: CGFloat(((greenValue*0.75)+0.25)*self.brightnessValue), blue: CGFloat(((blueValue*0.75)+0.25)*self.brightnessValue), alpha: 1)
     }
     
+    func catchNotification(notification:Notification) -> Void {
+        if notification.name.rawValue == "colorUpdate" {
+            let colorValues = notification.userInfo?["colorValues"] as? NSArray
+            redValue = colorValues?.object(at: 0) as! Float
+            greenValue = colorValues?.object(at: 1) as! Float
+            blueValue = colorValues?.object(at: 2) as! Float
+            self.brightnessValue = colorValues?.object(at: 3) as! Float
+            
+            let screenWidth = mainView.bounds.width
+            let screenHeight = mainView.bounds.height
+            
+            redBar.frame = CGRect(x:0,y:180+((screenHeight-150-180)*CGFloat(1.0-redValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(self.brightnessValue)))
+            greenBar.frame = CGRect(x:screenWidth*0.25,y:180+((screenHeight-150-180)*CGFloat(1.0-greenValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(self.brightnessValue)))
+            blueBar.frame = CGRect(x:screenWidth*0.5,y:180+((screenHeight-150-180)*CGFloat(1.0-blueValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(self.brightnessValue)))
+            dimmerBar.frame = CGRect(x:screenWidth*0.75,y:180+((screenHeight-150-180)*CGFloat(1.0-self.brightnessValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(self.brightnessValue)))
+            
+            updateColorDisplay()
+            sendColorToLEDS()
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        //setting up notification listeners
+        NotificationCenter.default.addObserver(forName:colorNotification, object:nil, queue:nil, using:catchNotification)
         
         //get the initial slider values and update the color display to show them
         redValue = 1.0
@@ -362,6 +413,23 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
         
         bluetoothRefreshTapProcess = 0
+    }
+    
+    func getColorUpdate(redValueIn: Float, greenValueIn: Float, blueValueIn: Float, alphaValueIn: Float) {
+        redValue = redValueIn
+        greenValue = greenValueIn
+        blueValue = blueValueIn
+        self.brightnessValue = alphaValueIn
+        print("COLOR UPDATE")
+        
+        /*
+ 
+         redBar.frame = CGRect(x:0,y:180,width:screenWidth/4.0,height:screenHeight-150)
+         greenBar.frame = CGRect(x:screenWidth*0.25,y:screenHeight-150,width:screenWidth/4.0,height:150)
+         blueBar.frame = CGRect(x:screenWidth*0.5,y:screenHeight-150,width:screenWidth/4.0,height:150)
+         dimmerBar.frame = CGRect(x:screenWidth*0.75,y:180,width:screenWidth/4.0,height:screenHeight-150)
+         
+        */
     }
     
 
