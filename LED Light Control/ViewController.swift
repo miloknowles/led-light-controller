@@ -178,9 +178,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             let screenWidth = mainView.bounds.width
             let screenHeight = mainView.bounds.height
             
-            redBar.frame = CGRect(x:0,y:180+((screenHeight-150-180)*CGFloat(1.0-redValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(self.brightnessValue)))
-            greenBar.frame = CGRect(x:screenWidth*0.25,y:180+((screenHeight-150-180)*CGFloat(1.0-greenValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(self.brightnessValue)))
-            blueBar.frame = CGRect(x:screenWidth*0.5,y:180+((screenHeight-150-180)*CGFloat(1.0-blueValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(self.brightnessValue)))
+            redBar.frame = CGRect(x:0,y:180+((screenHeight-150-180)*CGFloat(1.0-redValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(redValue)))
+            greenBar.frame = CGRect(x:screenWidth*0.25,y:180+((screenHeight-150-180)*CGFloat(1.0-greenValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(greenValue)))
+            blueBar.frame = CGRect(x:screenWidth*0.5,y:180+((screenHeight-150-180)*CGFloat(1.0-blueValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(blueValue)))
             dimmerBar.frame = CGRect(x:screenWidth*0.75,y:180+((screenHeight-150-180)*CGFloat(1.0-self.brightnessValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(self.brightnessValue)))
             
             updateColorDisplay()
