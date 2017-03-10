@@ -290,6 +290,14 @@
                                     <action selector="playPauseColorRotation" destination="Hnh-Df-EcQ" eventType="touchUpInside" id="g68-td-iXs"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9b5-38-cPi" userLabel="fadetoggle">
+                                <rect key="frame" x="65" y="25" width="41" height="41"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="button_flash.png"/>
+                                <connections>
+                                    <action selector="toggleFadeFlash" destination="Hnh-Df-EcQ" eventType="touchUpInside" id="iRu-2j-gKU"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.79643012749999997" green="1" blue="0.97436389479999996" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -305,6 +313,7 @@
                     <tabBarItem key="tabBarItem" title="Saved Colors" image="button_add_tabbar.png" selectedImage="button_add_tabbar.png" id="BJ9-Z8-jnk"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="flashFadeToggleButton" destination="9b5-38-cPi" id="FxO-lT-GQD"/>
                         <outlet property="mainTableView" destination="rXP-Su-fsE" id="Gb2-rh-ROg"/>
                         <outlet property="playPauseButton" destination="SPR-7W-Dhw" id="g95-VR-5fY"/>
                     </connections>

@@ -16,6 +16,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
 
     //notifications
     let colorNotification = Notification.Name(rawValue:"colorUpdate")
+    let colorNotification2 = Notification.Name(rawValue:"colorUpdateFastFade")
+    let colorNotification3 = Notification.Name(rawValue:"colorUpdateSlowFade")
     
     //creating BLE objects
     var centralManager: CBCentralManager!
@@ -161,6 +163,26 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             self.LEDLightPeripheral.writeValue(dataToSend, for: self.TXCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
         }
     }
+    
+    func sendColorToLEDSWithInputColor(red:Float, green:Float, blue:Float, alphaVal:Float) -> Void {
+        if self.TXCharacteristic != nil {
+            
+            //break up into expressions because the expression was "too complex" before (see: http://stackoverflow.com/questions/29707622/bizarre-swift-compiler-error-expression-too-complex-on-a-string-concatenation )
+            
+            //scale the RGB values to a [0,255] range, and then dim based on the brightness fraction
+            let ss1 = Int(255*red * alphaVal)
+            let ss2 = Int(255*green * alphaVal)
+            let ss3 = Int(255*blue * alphaVal)
+            
+            //convert the current stringToSend into NSData, then send it using the TXCharacteristic
+            self.stringToSend = "\(ss1).\(ss2).\(ss3)" as NSString
+            //print(self.stringToSend)
+            
+            let dataToSend = self.stringToSend.data(using: String.Encoding.utf8.rawValue)!
+            
+            self.LEDLightPeripheral.writeValue(dataToSend, for: self.TXCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
+        }
+    }
 
     
     //UpdateColorDisplay is called whenever slider bars adjust the custom color
@@ -170,10 +192,15 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
     
     func catchNotification(notification:Notification) -> Void {
-        if notification.name.rawValue == "colorUpdate" {
+        if notification.name.rawValue == "colorUpdate" || notification.name.rawValue == "colorUpdateFastFade" || notification.name.rawValue == "colorUpdateSlowFade" {
             let colorValues = notification.userInfo?["colorValues"] as? NSArray
             let screenWidth = mainView.bounds.width
             let screenHeight = mainView.bounds.height
+            
+            let redValueOLD = redValue
+            let greenValueOLD = greenValue
+            let blueValueOLD = blueValue
+            let alphaValueOLD = self.brightnessValue
             
             if barDragProcess != 1 {
                 redValue = colorValues?.object(at: 0) as! Float
@@ -193,7 +220,20 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             }
             
             updateColorDisplay()
-            sendColorToLEDS()
+            
+            if notification.name.rawValue == "colorUpdate" {
+                sendColorToLEDS()
+            } else if notification.name.rawValue == "colorUpdateFastFade" {
+                //intentionally overloads Bluetooth receiver with inputs to create fade
+                
+                for num in 0..<11 { //from 0 to 10
+                    sendColorToLEDSWithInputColor(red: redValueOLD+((redValue-redValueOLD)*Float(num)/10.0), green: greenValueOLD+((greenValue-greenValueOLD)*Float(num)/10.0), blue: blueValueOLD+((blueValue-blueValueOLD)*Float(num)/10.0), alphaVal: alphaValueOLD+((self.brightnessValue-alphaValueOLD)*Float(num)/10.0))
+                }
+            } else if notification.name.rawValue == "colorUpdateSlowFade" {
+                for num in 0..<29 { //from 0 to 28
+                    sendColorToLEDSWithInputColor(red: redValueOLD+((redValue-redValueOLD)*Float(num)/28.0), green: greenValueOLD+((greenValue-greenValueOLD)*Float(num)/28.0), blue: blueValueOLD+((blueValue-blueValueOLD)*Float(num)/28.0), alphaVal: alphaValueOLD+((self.brightnessValue-alphaValueOLD)*Float(num)/28.0))
+                }
+            }
         }
     }
     
@@ -204,6 +244,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         //setting up notification listeners
         NotificationCenter.default.addObserver(forName:colorNotification, object:nil, queue:nil, using:catchNotification)
+        NotificationCenter.default.addObserver(forName:colorNotification2, object:nil, queue:nil, using:catchNotification)
+        NotificationCenter.default.addObserver(forName:colorNotification3, object:nil, queue:nil, using:catchNotification)
         
         //get the initial slider values and update the color display to show them
         redValue = 1.0
@@ -422,23 +464,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
         
         bluetoothRefreshTapProcess = 0
-    }
-    
-    func getColorUpdate(redValueIn: Float, greenValueIn: Float, blueValueIn: Float, alphaValueIn: Float) {
-        redValue = redValueIn
-        greenValue = greenValueIn
-        blueValue = blueValueIn
-        self.brightnessValue = alphaValueIn
-        print("COLOR UPDATE")
-        
-        /*
- 
-         redBar.frame = CGRect(x:0,y:180,width:screenWidth/4.0,height:screenHeight-150)
-         greenBar.frame = CGRect(x:screenWidth*0.25,y:screenHeight-150,width:screenWidth/4.0,height:150)
-         blueBar.frame = CGRect(x:screenWidth*0.5,y:screenHeight-150,width:screenWidth/4.0,height:150)
-         dimmerBar.frame = CGRect(x:screenWidth*0.75,y:180,width:screenWidth/4.0,height:screenHeight-150)
-         
-        */
     }
     
 

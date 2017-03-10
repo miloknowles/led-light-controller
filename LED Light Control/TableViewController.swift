@@ -10,6 +10,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var mainTableView: UITableView?
     
     @IBOutlet weak var playPauseButton: UIButton?
+    @IBOutlet weak var flashFadeToggleButton: UIButton?
     
     let colorSavedNotification = Notification.Name(rawValue:"colorSaved")
     
@@ -18,8 +19,27 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var activeRow = 0 //-1=none,0+ = row index
     var activeRowShineTimer:Float = 0
     var activeRowTimer = 0
-    var activeRowTimerMax = 90
+    var activeRowTimerMax = 80
+    var activeRowTimerMaxSlow = 220
     var colorRotationActive = false
+    
+    var flashModeColorRotation = 0 //0=flash, 1=fade, 2=fastfade
+    
+    @IBAction func toggleFadeFlash() {
+        flashModeColorRotation += 1
+        if flashModeColorRotation > 2 {
+            flashModeColorRotation = 0
+        }
+        
+        //updates UI & vars based on current mode
+        if flashModeColorRotation == 0 {
+            flashFadeToggleButton?.setImage(UIImage(named: "button_flash.png"), for: .normal)
+        } else if flashModeColorRotation == 1 {
+            flashFadeToggleButton?.setImage(UIImage(named: "button_fastfade.png"), for: .normal)
+        } else if flashModeColorRotation == 2 {
+            flashFadeToggleButton?.setImage(UIImage(named: "button_slowfade.png"), for: .normal)
+        }
+    }
     
     @IBAction func editToggle() {
         if mainTableView?.isEditing == true {
@@ -139,7 +159,11 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             
             activeRowTimer += 1
-            if activeRowTimer > activeRowTimerMax {
+            var timerMax = activeRowTimerMax
+            if flashModeColorRotation == 2 {
+                timerMax = activeRowTimerMaxSlow
+            }
+            if activeRowTimer > timerMax {
                 activeRowTimer = 0
                 
                 activeRow += 1
@@ -150,7 +174,13 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 //send color data to ViewController
                 let colorValues = savedColors.object(at: activeRow) as! NSArray
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "colorUpdate"), object: nil, userInfo: ["colorValues":colorValues])
+                if flashModeColorRotation == 0 { //flash
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "colorUpdate"), object: nil, userInfo: ["colorValues":colorValues])
+                } else if flashModeColorRotation == 1 { //fast fade
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "colorUpdateFastFade"), object: nil, userInfo: ["colorValues":colorValues])
+                } else if flashModeColorRotation == 2 { //slow fade
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "colorUpdateSlowFade"), object: nil, userInfo: ["colorValues":colorValues])
+                }
                 
                 for row in 0..<mainTableView!.numberOfRows(inSection: 0) {
                     let cell:TableViewCellCustom1 = mainTableView?.cellForRow(at: IndexPath.init(row: row, section: 0)) as! TableViewCellCustom1
