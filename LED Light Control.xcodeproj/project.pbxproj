@@ -30,6 +30,10 @@
 		FCE0D8E41E7106CE0052AA97 /* wrench.png in Resources */ = {isa = PBXBuildFile; fileRef = FCE0D8E31E7106CE0052AA97 /* wrench.png */; };
 		FCE4D2021E6BA7E90058805E /* lightbulb.png in Resources */ = {isa = PBXBuildFile; fileRef = FCE4D2011E6BA7E90058805E /* lightbulb.png */; };
 		FCF3D23F1E70C82400C17101 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF3D23E1E70C82400C17101 /* TableViewController.swift */; };
+		FCF42B631E732EC5005222A2 /* WidgetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF42B621E732EC5005222A2 /* WidgetsViewController.swift */; };
+		FCF42B671E733688005222A2 /* sun.png in Resources */ = {isa = PBXBuildFile; fileRef = FCF42B661E733688005222A2 /* sun.png */; };
+		FCF42B6A1E7339C7005222A2 /* microphone.png in Resources */ = {isa = PBXBuildFile; fileRef = FCF42B681E7339C7005222A2 /* microphone.png */; };
+		FCF42B6B1E7339C7005222A2 /* musicnote.png in Resources */ = {isa = PBXBuildFile; fileRef = FCF42B691E7339C7005222A2 /* musicnote.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -72,6 +76,10 @@
 		FCE0D8E31E7106CE0052AA97 /* wrench.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wrench.png; sourceTree = "<group>"; };
 		FCE4D2011E6BA7E90058805E /* lightbulb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lightbulb.png; sourceTree = "<group>"; };
 		FCF3D23E1E70C82400C17101 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		FCF42B621E732EC5005222A2 /* WidgetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WidgetsViewController.swift; sourceTree = "<group>"; };
+		FCF42B661E733688005222A2 /* sun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sun.png; sourceTree = "<group>"; };
+		FCF42B681E7339C7005222A2 /* microphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = microphone.png; sourceTree = "<group>"; };
+		FCF42B691E7339C7005222A2 /* musicnote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = musicnote.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +118,7 @@
 				9802DBB91D07D793002BDC47 /* AppDelegate.swift */,
 				9802DBBB1D07D793002BDC47 /* ViewController.swift */,
 				FCF3D23E1E70C82400C17101 /* TableViewController.swift */,
+				FCF42B621E732EC5005222A2 /* WidgetsViewController.swift */,
 				9802DBBD1D07D793002BDC47 /* Main.storyboard */,
 				9802DBC01D07D794002BDC47 /* Assets.xcassets */,
 				9802DBC21D07D794002BDC47 /* LaunchScreen.storyboard */,
@@ -127,6 +136,9 @@
 				FC8CD83B1E6CFA8D0097A015 /* button_subtract.png */,
 				FC963F5F1E725F2A00D4700B /* button_pause.png */,
 				FC963F601E725F2A00D4700B /* button_play.png */,
+				FCF42B661E733688005222A2 /* sun.png */,
+				FCF42B681E7339C7005222A2 /* microphone.png */,
+				FCF42B691E7339C7005222A2 /* musicnote.png */,
 				FC8CD8421E6CFA980097A015 /* line.png */,
 				FCE0D8E31E7106CE0052AA97 /* wrench.png */,
 				FC963F5A1E71EDDC00D4700B /* button_reorder.png */,
@@ -209,9 +221,12 @@
 				FC8CD84F1E6D0A540097A015 /* lightbulb_outline.png in Resources */,
 				9802DBC11D07D794002BDC47 /* Assets.xcassets in Resources */,
 				FC8CD84B1E6D00140097A015 /* button_add_tabbar.png in Resources */,
+				FCF42B6B1E7339C7005222A2 /* musicnote.png in Resources */,
+				FCF42B6A1E7339C7005222A2 /* microphone.png in Resources */,
 				FC8CD84D1E6D00190097A015 /* lightbulb_tabbar.png in Resources */,
 				9802DBBF1D07D793002BDC47 /* Main.storyboard in Resources */,
 				FC8CD83F1E6CFA8D0097A015 /* button_flash.png in Resources */,
+				FCF42B671E733688005222A2 /* sun.png in Resources */,
 				FC8CD8411E6CFA8D0097A015 /* button_subtract.png in Resources */,
 				FC8CD8431E6CFA980097A015 /* line.png in Resources */,
 				FC8CD83E1E6CFA8D0097A015 /* button_fastfade.png in Resources */,
@@ -229,6 +244,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCF42B631E732EC5005222A2 /* WidgetsViewController.swift in Sources */,
 				9802DBBC1D07D793002BDC47 /* ViewController.swift in Sources */,
 				FCF3D23F1E70C82400C17101 /* TableViewController.swift in Sources */,
 				9802DBBA1D07D793002BDC47 /* AppDelegate.swift in Sources */,

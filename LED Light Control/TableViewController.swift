@@ -45,12 +45,14 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if mainTableView?.isEditing == true {
             mainTableView?.isEditing = false
         } else {
-            mainTableView?.isEditing = true
-            
-            if colorRotationActive == true {
-                colorRotationActive = false
+            if savedColors.count > 0 {
+                mainTableView?.isEditing = true
                 
-                playPauseButton?.setImage(UIImage(named: "button_play.png"), for: .normal)
+                if colorRotationActive == true {
+                    colorRotationActive = false
+                    
+                    playPauseButton?.setImage(UIImage(named: "button_play.png"), for: .normal)
+                }
             }
         }
     }
@@ -142,6 +144,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if colorRotationActive == true {
             if activeRow == -1 {
                 activeRow = 0
+                activeRowTimer = 0
                 
                 //send color data to ViewController
                 let colorValues = savedColors.object(at: activeRow) as! NSArray
