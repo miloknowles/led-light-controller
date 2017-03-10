@@ -110,6 +110,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         colorBookmarkedTimer = 120
         colorBookmarkedLabel.alpha = 1.0
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "colorSaved"), object: nil, userInfo: nil)
     }
     
     func update() {

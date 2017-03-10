@@ -231,13 +231,33 @@
                                 <rect key="frame" x="0.0" y="79" width="375" height="539"/>
                                 <color key="backgroundColor" red="0.68207724489999999" green="0.85641818579999995" blue="0.83446295910000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="td" id="h2k-K3-Tgz">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="td_cell" selectionStyle="default" indentationWidth="10" reuseIdentifier="td" focusStyle="custom" id="h2k-K3-Tgz" customClass="TableViewCellCustom1" customModule="LED_Light_Control" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="h2k-K3-Tgz" id="X0J-ET-C0J">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="td_view" tableViewCell="h2k-K3-Tgz" id="X0J-ET-C0J">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="td_label" text="&gt;" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bwb-Bq-0me">
+                                                    <rect key="frame" x="16" y="12" width="88" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="FJD-LL-K5o"/>
+                                                        <constraint firstAttribute="width" constant="88" id="gYd-Ve-xq1"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="27"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Bwb-Bq-0me" firstAttribute="centerY" secondItem="X0J-ET-C0J" secondAttribute="centerY" id="8uv-Vz-Vrf"/>
+                                                <constraint firstItem="Bwb-Bq-0me" firstAttribute="leading" secondItem="X0J-ET-C0J" secondAttribute="leadingMargin" constant="8" id="vg9-hI-DzD"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="cellContentView" destination="X0J-ET-C0J" id="Ysl-zX-Sn9"/>
+                                            <outlet property="celllabel" destination="Bwb-Bq-0me" id="Kth-q6-92g"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -254,6 +274,22 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fTs-X7-y4h" userLabel="editbutton">
+                                <rect key="frame" x="318" y="25" width="41" height="41"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="button_edit.png"/>
+                                <connections>
+                                    <action selector="editToggle" destination="Hnh-Df-EcQ" eventType="touchUpInside" id="ygG-Qm-mPx"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SPR-7W-Dhw" userLabel="playpausebutton">
+                                <rect key="frame" x="16" y="25" width="41" height="41"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="button_play.png"/>
+                                <connections>
+                                    <action selector="playPauseColorRotation" destination="Hnh-Df-EcQ" eventType="touchUpInside" id="g68-td-iXs"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.79643012749999997" green="1" blue="0.97436389479999996" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -270,6 +306,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="mainTableView" destination="rXP-Su-fsE" id="Gb2-rh-ROg"/>
+                        <outlet property="playPauseButton" destination="SPR-7W-Dhw" id="g95-VR-5fY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VmY-rE-RMS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -317,8 +354,10 @@
         <image name="button_add.png" width="492" height="492"/>
         <image name="button_add_tabbar.png" width="27" height="27"/>
         <image name="button_cut.png" width="492" height="492"/>
+        <image name="button_edit.png" width="492" height="492"/>
         <image name="button_fastfade.png" width="492" height="492"/>
         <image name="button_flash.png" width="492" height="492"/>
+        <image name="button_play.png" width="492" height="492"/>
         <image name="button_slowfade.png" width="492" height="492"/>
         <image name="lightbulb.png" width="390" height="595"/>
         <image name="lightbulb_outline.png" width="390" height="595"/>
