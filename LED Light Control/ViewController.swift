@@ -172,18 +172,25 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func catchNotification(notification:Notification) -> Void {
         if notification.name.rawValue == "colorUpdate" {
             let colorValues = notification.userInfo?["colorValues"] as? NSArray
-            redValue = colorValues?.object(at: 0) as! Float
-            greenValue = colorValues?.object(at: 1) as! Float
-            blueValue = colorValues?.object(at: 2) as! Float
-            self.brightnessValue = colorValues?.object(at: 3) as! Float
-            
             let screenWidth = mainView.bounds.width
             let screenHeight = mainView.bounds.height
             
-            redBar.frame = CGRect(x:0,y:180+((screenHeight-150-180)*CGFloat(1.0-redValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(redValue)))
-            greenBar.frame = CGRect(x:screenWidth*0.25,y:180+((screenHeight-150-180)*CGFloat(1.0-greenValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(greenValue)))
-            blueBar.frame = CGRect(x:screenWidth*0.5,y:180+((screenHeight-150-180)*CGFloat(1.0-blueValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(blueValue)))
-            dimmerBar.frame = CGRect(x:screenWidth*0.75,y:180+((screenHeight-150-180)*CGFloat(1.0-self.brightnessValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(self.brightnessValue)))
+            if barDragProcess != 1 {
+                redValue = colorValues?.object(at: 0) as! Float
+                redBar.frame = CGRect(x:0,y:180+((screenHeight-150-180)*CGFloat(1.0-redValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(redValue)))
+            }
+            if barDragProcess != 2 {
+                greenValue = colorValues?.object(at: 1) as! Float
+                greenBar.frame = CGRect(x:screenWidth*0.25,y:180+((screenHeight-150-180)*CGFloat(1.0-greenValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(greenValue)))
+            }
+            if barDragProcess != 3 {
+                blueValue = colorValues?.object(at: 2) as! Float
+                blueBar.frame = CGRect(x:screenWidth*0.5,y:180+((screenHeight-150-180)*CGFloat(1.0-blueValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(blueValue)))
+            }
+            if barDragProcess != 4 {
+                self.brightnessValue = colorValues?.object(at: 3) as! Float
+                dimmerBar.frame = CGRect(x:screenWidth*0.75,y:180+((screenHeight-150-180)*CGFloat(1.0-self.brightnessValue)),width:screenWidth/4.0,height:150+((screenHeight-150-150)*CGFloat(self.brightnessValue)))
+            }
             
             updateColorDisplay()
             sendColorToLEDS()

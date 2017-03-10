@@ -18,7 +18,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var activeRow = 0 //-1=none,0+ = row index
     var activeRowShineTimer:Float = 0
     var activeRowTimer = 0
-    var activeRowTimerMax = 110
+    var activeRowTimerMax = 90
     var colorRotationActive = false
     
     @IBAction func editToggle() {
