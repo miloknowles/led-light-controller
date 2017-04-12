@@ -137,6 +137,8 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
             savedColors.removeObject(at: indexPath.row)
             UserDefaults.standard.set(savedColors, forKey: "savedColors")
             mainTableView?.deleteRows(at: [indexPath], with: UITableViewRowAnimation.right)
+            
+            UserDefaults.standard.synchronize()
         }
     }
     

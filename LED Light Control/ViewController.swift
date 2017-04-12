@@ -109,6 +109,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         let colorValues = [redValue,greenValue,blueValue,self.brightnessValue]
         savedColors.add(colorValues)
         UserDefaults.standard.set(savedColors, forKey: "savedColors")
+        UserDefaults.standard.synchronize()
         
         colorBookmarkedTimer = 120
         colorBookmarkedLabel.alpha = 1.0

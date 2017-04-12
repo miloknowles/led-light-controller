@@ -1,0 +1,2 @@
+Human-readable data:
+{"coord":{"lon":-80.31,"lat":43.36},"weather":[{"id":620,"main":"Snow","description":"light shower snow","icon":"13d"}],"base":"stations","main":{"temp":264.24,"pressure":1020,"humidity":72,"temp_min":263.15,"temp_max":265.15},"visibility":4023,"wind":{"speed":10.8,"deg":320,"gust":17},"clouds":{"all":75},"dt":1489182480,"sys":{"type":1,"id":3730,"message":0.0117,"country":"CA","sunrise":1489146003,"sunset":1489188175},"id":5913695,"name":"Cambridge","cod":200}

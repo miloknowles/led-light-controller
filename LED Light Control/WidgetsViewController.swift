@@ -19,6 +19,9 @@ class WidgetsViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var mainTableView: UITableView?
     
     var activeWidget:Int = -1
+    var activeWidgetRefresh:Int = 0
+    
+    let weatherFetcher:WeatherGetter = WeatherGetter()
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
@@ -36,6 +39,7 @@ class WidgetsViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else if indexPath.row == 2 {
             cell.widgetTitle.text = "Music BPM Synchronization"
             cell.widgetIcon.image = UIImage.init(named: "musicnote.png")
+            cell.widgetSwitch.isEnabled = true
         }
         
         return cell
@@ -54,13 +58,41 @@ class WidgetsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func update() {
-        
+        //widget managing
+        if activeWidgetRefresh != activeWidget {
+            activeWidgetRefresh = activeWidget
+            
+            if activeWidget == 0 { //weather turned on
+                weatherFetcher.getWeather(city: "Cambridge")
+            }
+        }
     }
     
     func catchNotification(notification:Notification) -> Void {
         /*if notification.name.rawValue == "colorSaved" {
             
         }*/
+    }
+    
+    @IBAction func switchToggled(sender: UISwitch) {
+        let superview = sender.superview
+        let cell = superview?.superview as! TableViewCellCustom2
+        let activeRow = mainTableView?.indexPath(for: cell)?.row
+        
+        print("SWITCH \(activeRow) ON")
+        
+        if sender.isOn == true { //switch turned on
+            activeWidget = activeRow!
+            for row in 0..<mainTableView!.numberOfRows(inSection: 0) {
+                let cell:TableViewCellCustom2 = mainTableView?.cellForRow(at: IndexPath.init(row: row, section: 0)) as! TableViewCellCustom2
+                
+                if row != activeRow {
+                    cell.widgetSwitch.setOn(false, animated: true)
+                }
+            }
+        } else { //switch turned off
+            activeWidget = -1
+        }
     }
     
     override func viewDidLoad() {
