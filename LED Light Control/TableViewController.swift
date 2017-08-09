@@ -143,7 +143,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func update() {
-        if colorRotationActive == true {
+        /*if colorRotationActive == true {
             if activeRow == -1 {
                 activeRow = 0
                 activeRowTimer = 0
@@ -197,7 +197,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                 }
             }
-        } else {
+        }*//* else {
             if activeRow != -1 {
                 activeRow = -1
                 
@@ -206,7 +206,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.celllabel!.alpha = 0.0
                 }
             }
-        }
+        }*/
         
         if activeRow != -1 {
             
