@@ -79,7 +79,7 @@ class WidgetsViewController: UIViewController, UITableViewDelegate, UITableViewD
         let cell = superview?.superview as! TableViewCellCustom2
         let activeRow = mainTableView?.indexPath(for: cell)?.row
         
-        print("SWITCH \(activeRow) ON")
+        print("SWITCH \(activeRow ?? -1) ON")
         
         if sender.isOn == true { //switch turned on
             activeWidget = activeRow!
