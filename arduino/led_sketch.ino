@@ -1,6 +1,6 @@
-#include &amp;lt;SPI.h&amp;gt;;
+#include <SPI.h>;
 #include "Adafruit_BLE_UART.h";
-#include &amp;lt;String.h&amp;gt;;
+#include <String.h>;
  
 // defining the the BLE pins
 #define ADAFRUITBLE_REQ 10
@@ -72,8 +72,8 @@ void rxCallback(uint8_t *buffer, uint8_t len) {
   // convert the incoming data into a string, to make it easier to work with
   String receivedString;
  
-  for (int i=0; i&amp;lt;len;i++) {
-    if ((char)buffer[i] != ' ' &amp;amp;&amp;amp; (char)buffer[i] != '\n') {
+  for (int i=0; i<len;i++) {
+    if ((char)buffer[i] != ' ' && (char)buffer[i] != '\n') {
       receivedString += (char)buffer[i];
     }
   }
@@ -84,7 +84,7 @@ void rxCallback(uint8_t *buffer, uint8_t len) {
   //count how many "dots" are in the received string, and record the indices of the dots
   int dotIndices[2];
   int dotCounter = 0;
-  for (int c=0; c&amp;amp;amp;amp;amp;amp;lt;receivedString.length();c++) {
+  for (int c=0; c < receivedString.length();c++) {
     if (receivedString[c] == '.') {
       dotIndices[dotCounter] = c;
       dotCounter++;
@@ -142,7 +142,7 @@ void loop() {
   case 1: //slow fade
     int r,g,b;
     // fade from blue to violet
-    for (r = 0; r&amp;lt;256; r++) {
+    for (r = 0; r<256; r++) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 1) {break;}
       analogWrite(REDPIN, r);
@@ -150,7 +150,7 @@ void loop() {
     }
  
     // fade from violet to red
-    for (b = 255; b&amp;gt;0; b--) {
+    for (b = 255; b>0; b--) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 1) {break;}
       analogWrite(BLUEPIN, b);
@@ -158,7 +158,7 @@ void loop() {
     }
  
     // fade from red to yellow
-    for (g = 0; g&amp;lt;256; g++) {
+    for (g = 0; g<256; g++) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 1) {break;}
       analogWrite(GREENPIN, g);
@@ -166,7 +166,7 @@ void loop() {
     }
  
     // fade from yellow to green
-    for (r = 255; r&amp;gt;0; r--) {
+    for (r = 255; r>0; r--) {
        uart.pollACI();
        if (LED_CONTROL_STATE != 1) {break;}
        analogWrite(REDPIN, r);
@@ -174,7 +174,7 @@ void loop() {
     }
  
     // fade from green to teal
-    for (b = 0; b&amp;lt;256; b++) {
+    for (b = 0; b<256; b++) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 1) {break;}
       analogWrite(BLUEPIN, b);
@@ -182,7 +182,7 @@ void loop() {
     }
  
     // fade from teal to blue
-    for (g = 255; g&amp;gt;0; g--) {
+    for (g = 255; g>0; g--) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 1) {break;}
       analogWrite(GREENPIN, g);
@@ -192,7 +192,7 @@ void loop() {
   case 2: //fast fade
  
     // fade from blue to violet
-    for (r = 0; r&amp;lt;256; r++) {
+    for (r = 0; r<256; r++) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 2) {break;}
       analogWrite(REDPIN, r);
@@ -200,7 +200,7 @@ void loop() {
     }
  
     // fade from violet to red
-    for (b = 255; b&amp;gt;0; b--) {
+    for (b = 255; b>0; b--) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 2) {break;}
       analogWrite(BLUEPIN, b);
@@ -208,7 +208,7 @@ void loop() {
     }
  
     // fade from red to yellow
-    for (g = 0; g&amp;lt;256; g++) {
+    for (g = 0; g<256; g++) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 2) {break;}
       analogWrite(GREENPIN, g);
@@ -216,7 +216,7 @@ void loop() {
     }
  
     // fade from yellow to green
-    for (r = 255; r&amp;gt;0; r--) {
+    for (r = 255; r>0; r--) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 2) {break;}
       analogWrite(REDPIN, r);
@@ -224,7 +224,7 @@ void loop() {
     }
  
     // fade from green to teal
-    for (b = 0; b&amp;lt;256; b++) {
+    for (b = 0; b<256; b++) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 2) {break;}
       analogWrite(BLUEPIN, b);
@@ -232,7 +232,7 @@ void loop() {
     }
  
     // fade from teal to blue
-    for (g = 255; g&amp;gt;0; g--) {
+    for (g = 255; g>0; g--) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 2) {break;}
       analogWrite(GREENPIN, g);
@@ -240,7 +240,7 @@ void loop() {
     }
  
   case 3: //cut effect
-    for (int c=0; c&amp;lt;6; c++) {
+    for (int c=0; c<6; c++) {
       uart.pollACI();
       if (LED_CONTROL_STATE != 3) {break;}
       analogWrite(REDPIN, redCutVals[c]);
